@@ -1,0 +1,31 @@
+# ============================================================
+# MCDIA501 - Estadistica Computacional para la Toma de Decisiones
+# Framingham Heart Study - Tabaquismo intensivo y CHD
+# ============================================================
+# Instrucciones de instalacion:
+#
+#   1. Abre una terminal (o la terminal integrada de VS Code)
+#   2. Navega a la carpeta del proyecto
+#   3. Ejecuta:
+#
+#      pip install -r requirements.txt
+#
+# Luego abre el notebook normalmente (Jupyter o VS Code).
+# No es necesario importar este archivo dentro del notebook.
+# ============================================================
+
+# --- Manipulacion y analisis de datos ---
+pandas>=2.0.0
+numpy>=1.24.0
+
+# --- Visualizacion ---
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# --- Estadistica e inferencia ---
+scipy>=1.10.0
+
+# --- Entorno Jupyter (necesario para ejecutar .ipynb) ---
+jupyter>=1.0.0
+ipykernel>=6.0.0
+nbformat>=5.7.0

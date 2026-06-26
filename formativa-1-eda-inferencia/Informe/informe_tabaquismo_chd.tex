@@ -1,0 +1,697 @@
+\documentclass[11pt,a4paper]{article}
+
+% ===================== Codificación y fuentes =====================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% ===================== Página y utilidades ========================
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{longtable}
+
+% ===================== Etiquetas en español (sin babel) ===========
+\renewcommand{\contentsname}{Índice}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\refname}{Bibliografía}
+
+% ===================== Escala de grises (sin color) ================
+\definecolor{negro}{RGB}{0,0,0}
+\definecolor{gris}{RGB}{90,90,90}
+\definecolor{grisclaro}{RGB}{150,150,150}
+\definecolor{fillgray}{RGB}{175,175,175}
+\definecolor{darkgray}{RGB}{50,50,50}
+\definecolor{lightgray}{RGB}{230,230,230}
+
+% ===================== Hipervínculos (negro) =======================
+\hypersetup{colorlinks=true, linkcolor=negro, urlcolor=negro, citecolor=negro}
+
+% ===================== Estilo de títulos ===========================
+\titleformat{\section}{\large\bfseries\color{negro}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{negro}}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.4em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.3em}
+
+% ===================== Pie de página ===============================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\footnotesize\color{gris}Magíster en Ciencia de Datos e Inteligencia Artificial}
+\fancyfoot[R]{\footnotesize\color{gris}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ===================== Comandos del docente ========================
+\newcommand{\guia}[1]{{\small\itshape\color{gris}#1}\par\vspace{0.15em}}
+
+% Caja de información de la evaluación
+\newtcolorbox{infobox}[1][Información de la evaluación]{%
+  colback=black!3,colframe=negro,
+  fonttitle=\bfseries,coltitle=white,title={#1},
+  boxrule=0.6pt,arc=1pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,breakable}
+
+% Caja de hallazgo / resultado destacado
+\newtcolorbox{resultbox}[1][Hallazgo clave]{%
+  colback=black!5,colframe=darkgray,
+  fonttitle=\bfseries,coltitle=white,title={#1},
+  boxrule=0.6pt,arc=1pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,breakable}
+
+% Caja de hipótesis
+\newtcolorbox{hipbox}[1][Prueba de hipótesis]{%
+  colback=lightgray,colframe=gris,
+  fonttitle=\bfseries,coltitle=white,title={#1},
+  boxrule=0.6pt,arc=1pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,breakable}
+
+% ===================== Datos del grupo ============================
+\newcommand{\proyTitulo}{Tabaquismo intensivo como factor de riesgo de\\
+enfermedad coronaria: un análisis estadístico basado en el\\
+Framingham Heart Study}
+\newcommand{\proyIntegrantes}{[Nombre Integrante 1] \textperiodcentered\
+[Nombre Integrante 2] \textperiodcentered\ [Nombre Integrante 3]}
+\newcommand{\proyDataset}{Framingham Heart Study (Kaggle, n\,=\,4\,238)}
+\newcommand{\proyDocente}{[Nombre del Docente]}
+\newcommand{\proyFecha}{\today}
+\newcommand{\proyRepo}{\url{https://github.com/usuario/repositorio}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+% ─────────────────────────────────────────────────────────────────
+\begin{document}
+\pagenumbering{gobble}
+
+% ===================== PORTADA ====================================
+\thispagestyle{empty}
+\begin{center}
+\vspace*{1.0cm}
+% Logo UNAB (coloca logo_unab.png en la carpeta informe/ y descomenta):
+% \includegraphics[height=4.4cm]{logo_unab.png}\\[1.3cm]
+\vspace{2cm}
+
+{\footnotesize\color{gris}\MakeUppercase{Magíster en Ciencia de Datos e Inteligencia Artificial}}\\[0.15cm]
+{\footnotesize\color{grisclaro}MCDI501: Estadística Computacional para la Toma de Decisiones}\\[2.0cm]
+
+{\Large\bfseries\color{negro} Evaluación Formativa 1}\\[0.45cm]
+{\large\color{negro} Análisis Exploratorio e Inferencial}\\[1.0cm]
+
+{\small\itshape\color{gris}Informe grupal \textperiodcentered\ 0\,\% (formativa)}
+\end{center}
+
+\vspace{1.6cm}
+
+\begin{flushleft}
+\setlength{\extrarowheight}{5pt}
+\begin{tabular}{@{}>{\bfseries\color{negro}}l p{10cm}@{}}
+Título del proyecto: & \proyTitulo \\[0.3cm]
+Integrantes:         & \proyIntegrantes \\
+Dataset:             & \proyDataset \\
+Docente:             & \proyDocente \\
+Fecha:               & \proyFecha \\
+Repositorio GitHub:  & \proyRepo \\
+\end{tabular}
+\end{flushleft}
+
+\clearpage
+\pagenumbering{arabic}
+
+% ===================== CAJA DE INFORMACIÓN ========================
+\begin{infobox}
+\textbf{Fase del proyecto:} Fase 2 — Búsqueda y recopilación de información\\
+\textbf{Modalidad:} Grupal\qquad\textbf{Ponderación:} 0\,\% (formativa)\\
+\textbf{Entregable:} Informe en formato PDF, subido a Canvas\\
+\textbf{Resultado de aprendizaje (RA1):} Aplicar conceptos fundamentales de probabilidad
+e inferencia estadística en la resolución de problemas de decisión bajo incertidumbre.\\
+\textbf{Indicadores evaluados:} ID1.2 (estadística descriptiva),
+ID1.3 (intervalos de confianza), ID1.4 (pruebas de hipótesis).
+\end{infobox}
+
+\vspace{0.5em}
+\tableofcontents
+\newpage
+
+% ═════════════════════════════════════════════════════════════════
+\section{Introducción}
+% ═════════════════════════════════════════════════════════════════
+
+El presente informe corresponde a la Evaluación Formativa 1 del curso MCDIA501
+y documenta el análisis estadístico inicial realizado sobre el
+\textbf{Framingham Heart Study}, dataset seleccionado en la Fase 1 del proyecto.
+
+\subsection{Descripción del dataset}
+
+El Framingham Heart Study es uno de los estudios epidemiológicos longitudinales
+más relevantes de la historia de la medicina, iniciado en 1948 en Framingham,
+Massachusetts (EE.\,UU.). El conjunto de datos disponible registra información de
+\textbf{4\,238 pacientes} con \textbf{16 variables} demográficas, conductuales y clínicas.
+La variable objetivo es \texttt{TenYearCHD}, que indica si el paciente desarrolló
+enfermedad coronaria (EC) en los diez años posteriores al registro.
+
+La prevalencia global de EC en la muestra es del \textbf{15{,}2\,\%} (644 casos positivos
+sobre 4\,238), lo que refleja un desbalance de clases de aproximadamente 5{,}6:1.
+
+\subsection{Pregunta de investigación y relevancia}
+
+\textbf{Pregunta central:} ¿Constituye el tabaquismo intensivo (consumo de 20 o más
+cigarrillos diarios) un factor de riesgo estadísticamente significativo para el
+desarrollo de enfermedad coronaria a 10 años en la muestra del Framingham Heart Study?
+
+Esta pregunta tiene relevancia directa en políticas de salud pública: cuantificar
+la magnitud del efecto del tabaquismo intensivo permite priorizar intervenciones
+preventivas y estratificar pacientes según su perfil de riesgo.
+
+\subsection{Propósito del informe}
+
+Este informe presenta los procedimientos y resultados del análisis estadístico
+inicial, organizado en cuatro bloques: estadística descriptiva, estimación por
+intervalos, pruebas de hipótesis e interpretación preliminar. Todos los cálculos
+fueron implementados en Python utilizando las bibliotecas \texttt{pandas},
+\texttt{numpy}, \texttt{scipy} y \texttt{matplotlib}/\texttt{seaborn}.
+
+% ═════════════════════════════════════════════════════════════════
+\section{Aplicación de estadística descriptiva}
+\label{sec:descriptiva}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts, ID1.2) Se caracterizan las variables del dataset mediante medidas de tendencia
+central, dispersión y representaciones gráficas adecuadas a cada tipo de variable.}
+
+\subsection{Clasificación de variables relevantes}
+
+\begin{table}[H]
+\centering
+\caption{Variables de interés y su clasificación estadística}
+\vspace{0.3em}
+\begin{tabular}{llll}
+\toprule
+\textbf{Variable} & \textbf{Tipo estadístico} & \textbf{Subtipo} & \textbf{Rol} \\
+\midrule
+\texttt{cigsPerDay}     & Cuantitativa & Discreta       & Exposición principal \\
+\texttt{currentSmoker}  & Cualitativa  & Nominal binaria & Filtro de grupo      \\
+\texttt{heavy\_smoker}  & Cualitativa  & Nominal binaria & Variable creada: $\geq 20$ cig/día \\
+\texttt{TenYearCHD}     & Cualitativa  & Nominal binaria & Variable objetivo    \\
+\texttt{sysBP}          & Cuantitativa & Continua        & Variable de control  \\
+\texttt{prevalentHyp}   & Cualitativa  & Nominal binaria & Variable de control  \\
+\texttt{age}            & Cuantitativa & Discreta        & Variable de control  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Ingeniería de variable:} se creó la variable dicotómica \texttt{heavy\_smoker}
+definida como $\texttt{cigsPerDay} \geq 20$, umbral equivalente a una cajetilla diaria,
+ampliamente utilizado en epidemiología tabáquica como referencia de consumo intensivo.
+
+\subsection{Análisis de valores faltantes}
+
+\begin{table}[H]
+\centering
+\caption{Valores faltantes en variables de interés}
+\vspace{0.3em}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Variable} & \textbf{Faltantes} & \textbf{\%} \\
+\midrule
+\texttt{glucose}    & 388 & 9{,}16\,\% \\
+\texttt{education}  & 105 & 2{,}48\,\% \\
+\texttt{BPMeds}     &  53 & 1{,}25\,\% \\
+\texttt{totChol}    &  50 & 1{,}18\,\% \\
+\texttt{cigsPerDay} &  29 & 0{,}68\,\% \\
+\texttt{BMI}        &  19 & 0{,}45\,\% \\
+\texttt{heartRate}  &   1 & 0{,}02\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\texttt{cigsPerDay} presenta 29 valores faltantes (0{,}68\,\%), todos pertenecientes
+a personas registradas como fumadoras activas. El análisis los excluye por
+\textit{listwise deletion}; la proporción es lo suficientemente baja como para
+no comprometer la representatividad (n efectivo = 2\,065 para análisis de fumadores).
+
+\subsection{Estadísticos descriptivos — variable de exposición}
+
+La Tabla~\ref{tab:descriptiva_cigs} resume las medidas de tendencia central,
+dispersión y forma para \texttt{cigsPerDay} en el subgrupo de fumadores activos
+(n\,=\,2\,065).
+
+\begin{table}[H]
+\centering
+\caption{Estadísticos descriptivos de cigarrillos/día (fumadores activos)}
+\label{tab:descriptiva_cigs}
+\vspace{0.3em}
+\begin{tabular}{lc}
+\toprule
+\textbf{Estadístico} & \textbf{Valor} \\
+\midrule
+$n$ (válidos)               & 2\,065 \\
+Media ($\bar{x}$)           & 18{,}35 cig/día \\
+Mediana ($\tilde{x}$)       & 20{,}00 cig/día \\
+Desv. estándar ($s$, ddof=1)& 10{,}87 cig/día \\
+Rango intercuartílico (IQR) & 10{,}0 cig/día \\
+Asimetría ($g_1$)           & 0{,}731 (cola derecha moderada) \\
+Curtosis ($g_2$)            & 0{,}885 (mesocúrtica) \\
+Coeficiente de variación    & 59{,}2\,\% (alta variabilidad relativa) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} La distribución de cigarrillos/día es asimétrica positiva
+($g_1 = 0{,}731$), con la mayoría de los fumadores concentrados en el tramo de
+10–20 cigarrillos, y una cola derecha hacia consumos extremos (hasta 70 cig/día).
+La mediana (20) es la medida de centro más representativa dado el sesgo. El coeficiente
+de variación del 59{,}2\,\% refleja alta heterogeneidad en el consumo tabáquico.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figs/fig1_dist_cigs.pdf}
+\caption{Distribución de cigarrillos/día en fumadores activos (histograma con KDE)
+y boxplot por grupo tabáquico. Las líneas punteadas indican media (18{,}35)
+y mediana (20). El umbral de 20 cig/día delimita el grupo intensivo.}
+\label{fig:dist_cigs}
+\end{figure}
+
+\subsection{Descriptiva de la variable objetivo por grupo tabáquico}
+
+\begin{table}[H]
+\centering
+\caption{Prevalencia de CHD y características por grupo de tabaquismo}
+\label{tab:grupos}
+\vspace{0.3em}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Grupo} & \textbf{n} & \textbf{\% CHD} & \textbf{sysBP media (mmHg)} \\
+\midrule
+No fumador                  & 2\,144 & 14{,}5\,\% & 133{,}3 \\
+Fumador ligero ($<$20 cig/día) & 901  & 12{,}9\,\% & 130{,}3 \\
+Fumador intensivo ($\geq$20 cig/día) & 1\,193 & \textbf{18{,}2\,\%} & 129{,}8 \\
+\midrule
+\textbf{Total muestra}      & 4\,238 & 15{,}2\,\% & 132{,}4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figs/fig2_prevalencia_categoricas.pdf}
+\caption{Prevalencia de CHD (izquierda) e hipertensión previa (derecha) por grupo de
+tabaquismo. Se observa que los fumadores intensivos presentan la mayor prevalencia de
+CHD (18{,}2\,\%), mientras que los fumadores ligeros tienen menor prevalencia que los
+no fumadores, lo que sugiere que la intensidad del consumo es el factor determinante.}
+\label{fig:prevalencia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\textwidth]{figs/fig3_sysBP_grupos.pdf}
+\caption{Boxplot de presión arterial sistólica por grupo de tabaquismo (sin outliers
+extremos). Los puntos indican la media de cada grupo.}
+\label{fig:sysbp}
+\end{figure}
+
+% ═════════════════════════════════════════════════════════════════
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\textwidth]{figs/fig6_scatter_cigs_sysbp.pdf}
+\caption{Diagrama de dispersion entre cigarrillos por dia y presion arterial sistolica
+(fumadores activos). La recta de regresion muestra una correlacion negativa debil
+($r = -0{,}052$, $p = 0{,}019$), resultado contraintuitivo que sugiere confusion
+por variables de tercera (edad, hipertension previa).}
+\label{fig:scatter}
+\end{figure}
+
+\section{Estimación puntual e intervalos de confianza}
+\label{sec:IC}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts, ID1.3) Se utilizan métodos de estimación puntual e intervalos de confianza
+para determinar parámetros poblacionales relevantes, interpretando los resultados en el
+contexto del problema.}
+
+\subsection{Marco teórico}
+
+Un intervalo de confianza al $(1-\alpha)\times 100\,\%$ para la media poblacional $\mu$,
+con $\sigma$ desconocida, se construye mediante:
+
+\begin{equation}
+IC_{1-\alpha} = \bar{x} \;\pm\; t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}
+\label{eq:IC_t}
+\end{equation}
+
+donde $\bar{x}$ es la media muestral, $s$ la desviación estándar con corrección de Bessel
+(ddof\,=\,1) y $t_{\alpha/2,\,n-1}$ el valor crítico de la distribución $t$ de Student
+con $n-1$ grados de libertad.
+
+Para proporciones con $n$ grande (condición $n\hat{p}(1-\hat{p}) \geq 10$ verificada),
+se emplea la aproximación normal:
+\begin{equation}
+IC_{1-\alpha} = \hat{p} \;\pm\; z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
+\label{eq:IC_Z}
+\end{equation}
+
+\subsection{IC para la media de cigarrillos/día}
+
+\begin{resultbox}[IC 95\% — Cigarrillos por día (fumadores activos)]
+\begin{itemize}[noitemsep]
+  \item Estimación puntual: $\bar{x} = 18{,}35$ cig/día
+  \item Error estándar: $\text{SE} = s/\sqrt{n} = 10{,}87/\sqrt{2\,065} = 0{,}2393$
+  \item Valor crítico: $t_{0{,}025,\,2064} = 1{,}9611$
+  \item \textbf{IC 95\%: [17{,}88 ; 18{,}82] cig/día}
+\end{itemize}
+\textbf{Interpretación:} Con 95\,\% de confianza, el promedio poblacional de
+cigarrillos diarios entre fumadores activos se sitúa entre 17{,}88 y 18{,}82 cig/día.
+El intervalo angosto (amplitud $= 0{,}94$ cig) refleja la alta precisión obtenida con
+$n=2\,065$. El Teorema del Límite Central garantiza la normalidad de $\bar{x}$ (n $\gg$ 30).
+\end{resultbox}
+
+\subsection{IC para la proporción de CHD por grupo}
+
+La Tabla~\ref{tab:IC_CHD} presenta los intervalos de confianza al 95\,\% para la
+proporción de CHD en cada grupo, construidos mediante la ecuación~\eqref{eq:IC_Z}.
+
+\begin{table}[H]
+\centering
+\caption{IC 95\% para la proporción de CHD por grupo de tabaquismo}
+\label{tab:IC_CHD}
+\vspace{0.3em}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Grupo} & \textbf{n} & $\hat{p}$ & \textbf{IC inf.} & \textbf{IC sup.} \\
+\midrule
+No fumadores        & 2\,144 & 0{,}1451 & 0{,}1301 & 0{,}1600 \\
+Fumadores ligeros   &   901  & 0{,}1287 & 0{,}1069 & 0{,}1506 \\
+Fumadores intensivos & 1\,193 & \textbf{0{,}1819} & \textbf{0{,}1600} & \textbf{0{,}2038} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figs/fig4_IC_CHD.pdf}
+\caption{Prevalencia de CHD con barras de error (IC 95\%) por grupo de tabaquismo.
+Los IC de «Fumadores intensivos» y «No fumadores» no se solapan, evidencia
+preliminar de una diferencia estadísticamente significativa.}
+\label{fig:IC_CHD}
+\end{figure}
+
+\textbf{Hallazgo clave:} los intervalos de confianza al 95\,\% de «Fumadores intensivos»
+$[16{,}0\,\%, 20{,}4\,\%]$ y «No fumadores» $[13{,}0\,\%, 16{,}0\,\%]$ \emph{no se solapan},
+lo que constituye evidencia preliminar (sin requerir aún una prueba formal) de que la
+prevalencia de CHD difiere significativamente entre estos grupos. Este resultado motiva
+la prueba de hipótesis de la sección siguiente.
+
+% ═════════════════════════════════════════════════════════════════
+\section{Aplicación de pruebas de hipótesis}
+\label{sec:hipotesis}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts, ID1.4) Se aplican tres pruebas de hipótesis básicas, seleccionando el
+procedimiento adecuado según el tipo de variable y el nivel de significancia definido.
+Nivel de significancia global: $\alpha = 0{,}05$.}
+
+\subsection{Prueba 1 — Chi-cuadrado de independencia}
+
+\textbf{Pregunta:} ¿Existe asociación estadísticamente significativa entre el tabaquismo
+intensivo ($\geq$20 cig/día) y el desarrollo de CHD a 10 años?
+
+\begin{hipbox}[Prueba 1: $\chi^2$ de independencia]
+$H_0$: El tabaquismo intensivo y el CHD son \emph{independientes} (no hay asociación).\\
+$H_1$: El tabaquismo intensivo y el CHD \emph{no} son independientes (hay asociación).\\
+Tipo: bilateral\quad|\quad$\alpha = 0{,}05$\quad|\quad Variable: 2 categóricas nominales
+
+\vspace{0.4em}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Sin CHD} & \textbf{Con CHD} & \textbf{Total} \\
+\midrule
+No intensivo     & 2\,618 (86{,}0\,\%) & 427 (14{,}0\,\%) & 3\,045 \\
+Intensivo ($\geq$20) & 976 (81{,}8\,\%)  & 217 (18{,}2\,\%) & 1\,193 \\
+\midrule
+\textbf{Total}   & 3\,594 & 644 & 4\,238 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4em}
+$\chi^2 = 11{,}23$ \quad $gl = 1$ \quad $p = 0{,}0008$ \quad
+$V_{\text{Cramer}} = 0{,}052$ \quad $OR = 1{,}36$
+
+\vspace{0.4em}
+\textbf{Decisión:} $p = 0{,}0008 < \alpha = 0{,}05$ \;\textrightarrow\; \textbf{se rechaza $H_0$.}
+
+\textbf{Conclusión:} Existe asociación estadísticamente significativa entre el
+tabaquismo intensivo y el CHD. Los fumadores intensivos tienen 1{,}36 veces más
+\textit{odds} de desarrollar EC respecto a los no intensivos ($OR = 1{,}36$).
+La magnitud del efecto es pequeña ($V = 0{,}052$), lo que indica que el tabaquismo
+actúa en conjunto con otros factores de riesgo.
+\end{hipbox}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{figs/fig5_contingencia.pdf}
+\caption{Izquierda: tabla de contingencia visualizada (porcentajes por fila).
+Derecha: prevalencia de CHD en grupo no intensivo (14{,}0\,\%) vs intensivo (18{,}2\,\%),
+con resultado del test de independencia.}
+\label{fig:contingencia}
+\end{figure}
+
+\subsection{Prueba 2 — Prueba $t$ de dos muestras independientes}
+
+\textbf{Pregunta:} ¿Difiere la presión arterial sistólica media entre fumadores
+intensivos y no intensivos?
+
+\begin{hipbox}[Prueba 2: t de dos muestras independientes]
+$H_0$: $\mu_{\text{sysBP,\,intensivo}} = \mu_{\text{sysBP,\,no intensivo}}$\\
+$H_1$: $\mu_{\text{sysBP,\,intensivo}} \neq \mu_{\text{sysBP,\,no intensivo}}$\\
+Tipo: bilateral\quad|\quad$\alpha = 0{,}05$\quad|\quad Variable: cuantitativa continua
+
+\vspace{0.4em}
+\begin{tabular}{lcc}
+\toprule
+ & \textbf{No intensivo} & \textbf{Intensivo ($\geq$20)} \\
+\midrule
+$n$ & 3\,045 & 1\,193 \\
+Media & 133{,}3 mmHg & 129{,}8 mmHg \\
+Desv. estándar & 22{,}8 mmHg & 19{,}7 mmHg \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+$t = 4{,}67$ \quad $p < 0{,}0001$ \quad $d_{\text{Cohen}} = 0{,}165$
+
+\vspace{0.4em}
+\textbf{Decisión:} $p < 0{,}0001 < \alpha = 0{,}05$ \;\textrightarrow\; \textbf{se rechaza $H_0$.}
+
+\textbf{Conclusión:} La presión sistólica difiere significativamente entre grupos:
+el grupo \emph{no intensivo} presenta mayor sysBP media (133{,}3 vs 129{,}8 mmHg,
+diferencia = 3{,}5 mmHg). Este resultado es contraintuitivo, ya que se esperaría
+mayor presión en fumadores intensivos. Una explicación plausible es la confusión
+por edad: los fumadores intensivos de la muestra tienden a ser más jóvenes,
+lo que atenúa su presión basal. Se requiere análisis multivariado en Fase 3.
+\end{hipbox}
+
+\subsection{Prueba 3 — Prueba $t$ de una muestra}
+
+\textbf{Pregunta:} ¿El consumo medio de cigarrillos entre fumadores activos supera
+el umbral de 10 cig/día (referencia de consumo leve según OMS)?
+
+\begin{hipbox}[Prueba 3: t de una muestra (unilateral derecha)]
+$H_0$: $\mu_{\text{cigs}} \leq 10$ cig/día\\
+$H_1$: $\mu_{\text{cigs}} > 10$ cig/día\\
+Tipo: \textbf{unilateral derecha}\quad|\quad$\alpha = 0{,}05$\quad|\quad Variable: cuantitativa discreta
+
+\vspace{0.4em}
+$\bar{x} = 18{,}35$ cig/día \quad $n = 2\,065$ \quad
+$t = 34{,}92$ \quad $p < 0{,}001$\\
+IC 95\,\% de la media: $[17{,}88;\, 18{,}82]$ cig/día (no incluye $\mu_0 = 10$)
+
+\vspace{0.4em}
+\textbf{Decisión:} $p < 0{,}001 < \alpha = 0{,}05$ \;\textrightarrow\; \textbf{se rechaza $H_0$.}
+
+\textbf{Conclusión:} El consumo medio de los fumadores activos de la muestra
+(18{,}35 cig/día) supera significativamente el umbral de consumo leve de 10 cig/día.
+Esto valida la hipótesis de que la muestra corresponde mayoritariamente a fumadores
+moderados-intensivos, lo que refuerza la pertinencia del estudio.
+\end{hipbox}
+
+% ═════════════════════════════════════════════════════════════════
+\section{Documentación de procedimientos y resultados}
+\label{sec:documentacion}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts) Se documenta de forma clara, ordenada y completa cada procedimiento
+estadístico aplicado, garantizando la trazabilidad del análisis.}
+
+\subsection{Flujo de análisis}
+
+El análisis se desarrolló en Python 3 siguiendo el flujo:
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{Carga y exploración inicial:} \texttt{pd.read\_csv()} $\rightarrow$
+        \texttt{df.info()}, \texttt{df.describe()}, \texttt{df.isnull().sum()}.
+  \item \textbf{Ingeniería de variable:} creación de \texttt{heavy\_smoker}
+        (\texttt{cigsPerDay} $\geq$ 20).
+  \item \textbf{Estadística descriptiva (ID1.2):} \texttt{df.describe()},
+        \texttt{.skew()}, \texttt{.kurt()}, visualizaciones con \texttt{seaborn}.
+  \item \textbf{Intervalos de confianza (ID1.3):} \texttt{scipy.stats.t.interval()},
+        fórmula IC para proporciones con $z_{0{,}025} = 1{,}96$.
+  \item \textbf{Pruebas de hipótesis (ID1.4):}
+    \begin{itemize}[noitemsep]
+      \item Prueba 1: \texttt{scipy.stats.chi2\_contingency()}
+      \item Prueba 2: \texttt{scipy.stats.ttest\_ind()}
+      \item Prueba 3: \texttt{scipy.stats.ttest\_1samp(alternative='greater')}
+    \end{itemize}
+  \item \textbf{Reproducibilidad:} semilla fija donde aplica; código disponible en GitHub.
+\end{enumerate}
+
+\subsection{Decisiones metodológicas documentadas}
+
+\begin{table}[H]
+\centering
+\caption{Decisiones metodológicas y justificación}
+\label{tab:decisiones}
+\vspace{0.3em}
+\begin{tabular}{p{4.5cm}p{9cm}}
+\toprule
+\textbf{Decisión} & \textbf{Justificación} \\
+\midrule
+Umbral $\geq 20$ cig/día & Equivale a una cajetilla diaria; referencia epidemiológica estándar. \\
+\addlinespace
+Usar distribución $t$ (no $Z$) para ICs de medias & $\sigma$ poblacional desconocida; pandas usa ddof=1 por defecto. \\
+\addlinespace
+Usar distribución $Z$ para ICs de proporciones & $n\hat{p}(1-\hat{p}) \geq 10$ verificado en todos los grupos (TLC). \\
+\addlinespace
+Prueba bilateral en chi² y prueba $t$ dos muestras & No se tiene hipótesis direccional previa documentada. \\
+\addlinespace
+Prueba unilateral derecha en prueba $t$ una muestra & La hipótesis es direccional: el consumo \emph{supera} el umbral. \\
+\addlinespace
+\textit{Listwise deletion} en faltantes & Porcentaje $<10\%$ en todas las variables de análisis; no requiere imputación. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ═════════════════════════════════════════════════════════════════
+\section{Interpretación preliminar de resultados}
+\label{sec:interpretacion}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts) Se presentan interpretaciones preliminares claras y coherentes,
+vinculando los resultados con el problema de decisión bajo incertidumbre.}
+
+\subsection{Síntesis de hallazgos}
+
+\begin{resultbox}[Síntesis de resultados]
+\begin{enumerate}[noitemsep]
+  \item \textbf{Prevalencia diferencial:} los fumadores intensivos ($\geq$20 cig/día)
+        presentan una tasa de CHD de 18{,}2\,\% frente al 14{,}5\,\% de los no fumadores
+        — una diferencia absoluta de 3{,}7 puntos porcentuales.
+
+  \item \textbf{Asociación significativa (Prueba 1):} el chi-cuadrado confirma que el
+        tabaquismo intensivo y el CHD \emph{no} son independientes
+        ($\chi^2 = 11{,}23$, $p = 0{,}0008$, $OR = 1{,}36$).
+
+  \item \textbf{Efecto pequeño pero real:} el $V$ de Cramer (0{,}052) indica un efecto
+        estadísticamente significativo pero de magnitud pequeña, consistente con la
+        naturaleza multifactorial de la enfermedad coronaria.
+
+  \item \textbf{Hallazgo contraintuitivo (Prueba 2):} la presión sistólica es mayor
+        en el grupo no intensivo, posiblemente por confusión con la edad. Requiere
+        control multivariado en Fase 3.
+
+  \item \textbf{Consumo elevado confirmado (Prueba 3):} la muestra de fumadores activos
+        consume en promedio 18{,}35 cig/día, muy por encima del umbral de consumo leve
+        ($p < 0{,}001$, IC 95\%: [17{,}88; 18{,}82]).
+\end{enumerate}
+\end{resultbox}
+
+\subsection{Vinculación con el problema de decisión bajo incertidumbre}
+
+Los resultados obtenidos tienen implicancias directas para la toma de decisiones en
+salud pública:
+
+\begin{itemize}
+  \item \textbf{Estratificación de riesgo:} un paciente fumador intensivo tiene un riesgo
+        estimado de CHD del 18{,}2\,\% (IC 95\%: [16{,}0\,\%, 20{,}4\,\%]), lo que lo
+        clasifica en un cuartil de riesgo superior al promedio de la muestra (15{,}2\,\%).
+
+  \item \textbf{Intervención focalizada:} dado que la magnitud del efecto aislado es
+        pequeña ($OR = 1{,}36$), las políticas de prevención más efectivas deben abordar
+        simultáneamente tabaquismo, hipertensión y edad — los tres factores con mayor
+        correlación con CHD identificados en el análisis exploratorio.
+
+  \item \textbf{Limitaciones de esta fase:} el análisis es bivariado (una variable
+        explicativa a la vez). La confusión por variables de tercera (edad, sexo,
+        presión arterial) no está controlada. Esto se abordará mediante regresión
+        logística multivariada en la Fase 3 del proyecto.
+
+  \item \textbf{Incertidumbre cuantificada:} los intervalos de confianza proveen rangos
+        plausibles para los parámetros poblacionales, permitiendo comunicar no solo el
+        efecto estimado sino también su precisión — fundamental en la toma de decisiones
+        bajo incertidumbre.
+\end{itemize}
+
+\subsection{Proyección hacia fases siguientes}
+
+En la Fase 3 se desarrollará un modelo de regresión logística que incluya
+\texttt{heavy\_smoker}, \texttt{age}, \texttt{sysBP} y \texttt{prevalentHyp} como
+predictores, lo que permitirá estimar el efecto del tabaquismo controlando por los
+demás factores de riesgo y cuantificar su contribución marginal al riesgo de CHD.
+
+% ═════════════════════════════════════════════════════════════════
+\section{Presentación formal del informe}
+\label{sec:formato}
+% ═════════════════════════════════════════════════════════════════
+
+\guia{(15 pts) Verificación de redacción formal, uso de lenguaje estadístico y formato.}
+
+Este informe fue elaborado siguiendo los lineamientos formales de la evaluación:
+\begin{itemize}[noitemsep]
+  \item Todos los estadísticos se reportan con su símbolo correspondiente
+        ($\bar{x}$, $s$, $\hat{p}$, $\chi^2$, $t$, $p$, IC).
+  \item Los valores de $p$ se reportan de forma exacta (no solo «$p<0{,}05$»).
+  \item Las decisiones sobre hipótesis incluyen siempre la comparación explícita
+        $p$ vs $\alpha$, y la conclusión está contextualizada al problema.
+  \item Las figuras tienen título, pie de figura y referencia en el texto.
+  \item Las tablas tienen numeración y descripción.
+  \item El código fuente está disponible en el repositorio GitHub indicado en la portada.
+\end{itemize}
+
+% ═════════════════════════════════════════════════════════════════
+\section*{Bibliografía}
+% ═════════════════════════════════════════════════════════════════
+\addcontentsline{toc}{section}{Bibliografía}
+
+\begin{enumerate}[noitemsep,label={[\arabic*]}]
+  \item Maidana, J.P. (2026). \textit{Bases de datos disponibles para el proyecto del curso}
+        [Apunte]. Universidad Andrés Bello, Santiago, Chile.
+  \item Maidana, J.P. (2026). \textit{Medidas de tendencia central: media, mediana y moda}
+        [Apunte]. Universidad Andrés Bello, Santiago, Chile.
+  \item Maidana, J.P. (2026). \textit{Medidas de dispersión y forma} [Apunte].
+        Universidad Andrés Bello, Santiago, Chile.
+  \item Maidana, J.P. (2026). \textit{Fundamentos de inferencia estadística: de la muestra
+        a la población} [Apunte]. Universidad Andrés Bello, Santiago, Chile.
+  \item Maidana, J.P. (2026). \textit{Intervalos de confianza: cuantificando la
+        incertidumbre estadística} [Apunte]. Universidad Andrés Bello, Santiago, Chile.
+  \item Maidana, J.P. (2026). \textit{Pruebas de hipótesis: pruebas t y Z para una muestra}
+        [Apunte]. Universidad Andrés Bello, Santiago, Chile.
+  \item Dawber, T.R., Meadors, G.F., \& Moore, F.E. (1951). Epidemiological approaches to
+        heart disease: the Framingham Study.
+        \textit{American Journal of Public Health}, 41(3), 279–286.
+  \item Kaggle Dataset: \url{https://www.kaggle.com/datasets/dileep070/heart-disease-prediction-using-logistic-regression}
+\end{enumerate}
+
+\end{document}
